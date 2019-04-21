@@ -139,7 +139,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             android:text="Let's Go!"
             android:textAllCaps="false"
-            android:onClick="buRegis"
+            android:onClick="buregis"
             android:textColor="@color/white"
             android:textSize="17dp"
             app:layout_constraintBottom_toBottomOf="parent"

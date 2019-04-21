@@ -5,10 +5,19 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
@@ -18,10 +27,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
     Button login, regist;
     EditText email, pass;
+    String url = "http://10.0.2.2/smartrecipe/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,96 +57,33 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://10.0.2.2/smartrecipe/login.php?email=" + email.getText().toString() + "&password=" + pass.getText().toString();
-                new getMySqlData().execute(url);
+                getData();
             }
         });
     }
 
-    public class getMySqlData extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            //before works
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                String NewsData;
-                URL url = new URL(params[0]);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setConnectTimeout(7000);
-
-                try {
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    NewsData = ConvertInputToStringNoChange(in);
-                    publishProgress(NewsData);
-                } finally {
-                    urlConnection.disconnect();
-                }
-
-            } catch (Exception ex) {
+    private void getData() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("ERRORRRR", response);
             }
-            return null;
-        }
-
-
-        protected void onProgressUpdate(String... progress) {
-
-            try {
-                JSONObject json = new JSONObject(progress[0]);
-
-                int id = json.getInt("id");
-                String nama = json.getString("fullname");
-                String em = json.getString("email");
-                int stats = json.getInt("status");
-
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.clear();
-                editor.commit();
-                editor.putInt("id", id);
-                editor.putString("name", nama);
-                editor.putString("email", em);
-                editor.apply();
-                if(stats == 1) {
-                    Intent i = new Intent(getApplicationContext(), Quest1.class);
-                    startActivity(i);
-                    finish();
-                }
-                else if(stats == 2) {
-                    Intent i = new Intent(getApplicationContext(), BottomNav.class);
-                    startActivity(i);
-                    finish();
-                }
-
-            } catch (Exception ex) {
-                Toast.makeText(getApplicationContext(), "GAGAL MEMUAT DATA API", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-
-
-
-    public static String ConvertInputToStringNoChange(InputStream inputStream) {
-
-        BufferedReader bureader=new BufferedReader( new InputStreamReader(inputStream));
-        String line ;
-        String linereultcal="";
-
-        try{
-            while((line=bureader.readLine())!=null) {
-                linereultcal+=line;
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
             }
-            inputStream.close();
-
-
-        }catch (Exception ex){}
-
-        return linereultcal;
+        }){
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("email", email.getText().toString());
+                params.put("password", pass.getText().toString());
+                //params.put("nickname",data[3]);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.alviraputri.smartrecipe;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -19,10 +31,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Register extends AppCompatActivity {
     Button login, regist;
     EditText nama, email, pw;
+    String url = "http://sistechuph.com/smartrecipe/register.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,78 +68,36 @@ public class Register extends AppCompatActivity {
         });*/
     }
 
-    public void buRegis(View view) {
-        String url = "http://10.0.2.2/smartrecipe/register.php?name=" + nama.getText().toString() + "&password=" + pw.getText().toString() + "&email="+email.getText().toString();
-        new getMySqlData().execute(url);
-        Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
+    public void buregis(View view) {
+        //url = "http://sistechuph.com/smartrecipe/register.php?name=" + nama.getText().toString() + "&password=" + pw.getText().toString() + "&email="+email.getText().toString();
+        getData();
+        //Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
         Log.v("XXXXXXXXXXXXXXXXXXXXXX", url);
     }
 
-    public class getMySqlData extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            //before works
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                String NewsData;
-                URL url = new URL(params[0]);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setConnectTimeout(7000);
-
-                try {
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    NewsData = ConvertInputToStringNoChange(in);
-                    publishProgress(NewsData);
-                } finally {
-                    urlConnection.disconnect();
-                }
-
-            } catch (Exception ex) {
+    private void getData() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("ERRORRRR", response);
             }
-            return null;
-        }
-
-
-        protected void onProgressUpdate(String... progress) {
-
-            try {
-                JSONObject json = new JSONObject(progress[0]);
-
-                String msg = json.getString("msg");
-                Toast.makeText(getApplicationContext(), progress[0], Toast.LENGTH_LONG).show();
-                Intent a = new Intent(getApplicationContext(), Login.class);
-                startActivity(a);
-                finish();
-            } catch (Exception ex) {
-                Toast.makeText(getApplicationContext(), "GAGAL MEMUAT DATA API", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-
-
-
-    public static String ConvertInputToStringNoChange(InputStream inputStream) {
-
-        BufferedReader bureader=new BufferedReader( new InputStreamReader(inputStream));
-        String line ;
-        String linereultcal="";
-
-        try{
-            while((line=bureader.readLine())!=null) {
-                linereultcal+=line;
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
             }
-            inputStream.close();
-
-
-        }catch (Exception ex){}
-
-        return linereultcal;
+        }){
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("name", nama.getText().toString());
+                params.put("password", pw.getText().toString());
+                params.put("email", email.getText().toString());
+                //params.put("nickname",data[3]);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }
