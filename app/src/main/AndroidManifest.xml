@@ -23,7 +23,17 @@
 
         <activity android:name=".Register" />
         <activity android:name=".Home" />
-        <activity android:name=".Details"></activity>
+        <activity android:name=".Details" />
+        <activity android:name=".addRecipe" />
+        <activity android:name=".addRecipe2" />
+        <activity android:name=".BottomNav" />
+        <activity android:name=".StepByStep" />
+        <activity android:name=".Quest1" />
+        <activity android:name=".Quest2" />
+        <activity android:name=".Quest3" />
+        <activity android:name=".Quest4" />
+        <activity android:name=".Quest5" />
+        <activity android:name=".search"></activity>
     </application>
 
 </manifest>

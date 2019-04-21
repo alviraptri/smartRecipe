@@ -8,4 +8,6 @@
     <color name="white">#ffffff</color>
     <color name="abu">#F9F9F9</color>
     <color name="abugelap">#707070</color>
+    <color name="item">#000000</color>
+    <color name="biru">#1381A4</color>
 </resources>

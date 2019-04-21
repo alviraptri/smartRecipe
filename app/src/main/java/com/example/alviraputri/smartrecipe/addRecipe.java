@@ -6,30 +6,31 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Register extends AppCompatActivity {
-    Button login, regist;
+public class addRecipe extends AppCompatActivity {
+
+    Button next, back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_add_recipe);
 
-        login = (Button) findViewById(R.id.login);
-        regist = (Button) findViewById(R.id.register);
+        next = (Button) findViewById(R.id.next);
+        back = (Button) findViewById(R.id.back);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent a = new Intent(getApplicationContext(), Login.class);
+                Intent a = new Intent(getApplicationContext(), addRecipe2.class);
                 startActivity(a);
                 finish();
             }
         });
 
-        regist.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent a = new Intent(getApplicationContext(), Login.class);
+                Intent a = new Intent(addRecipe.this, fragmentDiscover.class);
                 startActivity(a);
                 finish();
             }
