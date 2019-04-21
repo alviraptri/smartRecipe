@@ -1,12 +1,14 @@
 package com.example.alviraputri.smartrecipe;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class Quest5 extends AppCompatActivity {
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,12 +17,20 @@ public class Quest5 extends AppCompatActivity {
     }
 
     public void quest5of1(View view){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        int id_user = pref.getInt("id", 0);
+        url = "http://10.0.2.2/smartrecipe/input.php?id_user=" + id_user + "&id_question=5&answer=1";
         Intent a = new Intent(this, BottomNav.class);
         startActivity(a);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void quest5of2(View view){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        int id_user = pref.getInt("id", 0);
+        url = "http://10.0.2.2/smartrecipe/input.php?id_user=" + id_user + "&id_question=5&answer=2";
         Intent b = new Intent(this, BottomNav.class);
         startActivity(b);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
