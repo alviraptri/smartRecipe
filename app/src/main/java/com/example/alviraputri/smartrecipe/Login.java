@@ -1,5 +1,6 @@
 package com.example.alviraputri.smartrecipe;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -15,10 +16,14 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -27,13 +32,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Login extends AppCompatActivity {
     Button login, regist;
     EditText email, pass;
-    String url = "http://10.0.2.2/smartrecipe/login.php";
+    String url = "http://sistechuph.com/smartrecipe/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,43 @@ public class Login extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("ERRORRRR", response);
+                try {
+                    Log.e("WOI", response);
+                    JSONObject object = new JSONObject(response);
+                    for(int i = 0; i < object.length(); i++) {
+                        try {
+                            JSONObject jsonObject = object.getJSONObject("user");
+                            int id = jsonObject.getInt("id");
+                            String nama = jsonObject.getString("fullname");
+                            String email = jsonObject.getString("email");
+                            int stt = jsonObject.getInt("status");
+
+                            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = pref.edit();
+
+                            editor.clear();
+                            editor.commit();
+                            editor.putInt("id", id);
+                            editor.putString("nama", nama);
+                            editor.putString("email", email);
+                            editor.apply();
+
+                            if(stt == 1) {
+                                Intent q = new Intent(getApplicationContext(), Quest1.class);
+                                startActivity(q);
+                            }
+                            else {
+                                Intent w = new Intent(getApplicationContext(), BottomNav.class);
+                                startActivity(w);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -79,11 +121,11 @@ public class Login extends AppCompatActivity {
                 Map<String,String> params = new HashMap<>();
                 params.put("email", email.getText().toString());
                 params.put("password", pass.getText().toString());
-                //params.put("nickname",data[3]);
                 return params;
             }
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
 }
