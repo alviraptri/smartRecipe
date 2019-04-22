@@ -17,7 +17,8 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="35dp"
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/textView7"
@@ -97,19 +98,17 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-                <!--
-                <ListView
-                    android:id="@+id/listView"
+                <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:divider="@color/white">
+                    android:id="@+id/discover_recyclerview">
 
-                </ListView> -->
+                </android.support.v7.widget.RecyclerView>
 
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -315,7 +314,7 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </LinearLayout>-->
         </ScrollView>
             
 

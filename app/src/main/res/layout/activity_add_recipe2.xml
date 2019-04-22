@@ -16,7 +16,8 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="35dp"
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/textView7"
@@ -165,7 +166,6 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="@null"
-                android:onClick="ima"
                 app:layout_constraintBottom_toBottomOf="@+id/textView11"
                 app:layout_constraintEnd_toEndOf="@+id/textView11"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -191,7 +191,7 @@
             <!-- /upload image -->
 
             <Button
-                android:id="@+id/next"
+                android:id="@+id/next2"
                 android:layout_width="93dp"
                 android:layout_height="36dp"
                 android:layout_marginBottom="20dp"
@@ -207,8 +207,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.972"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+                app:layout_constraintStart_toStartOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
         <!-- isi bawah -->

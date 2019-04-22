@@ -1,11 +1,7 @@
 package com.example.alviraputri.smartrecipe;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,10 +20,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,27 +45,29 @@ public class addRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
 
-        next = (Button) findViewById(R.id.next);
+        next = (Button) findViewById(R.id.next2);
         back = (Button) findViewById(R.id.back);
         foto = (Button) findViewById(R.id.foto);
 
         title = (EditText) findViewById(R.id.editText2);
         ing = (EditText) findViewById(R.id.editText3);
 
-        lvl = findViewById(R.id.spinner1);
+        lvl = (Spinner) findViewById(R.id.spinner1);
         lev = new ArrayList<>();
-        getLevel();
+
         adapter = new ArrayAdapter<Spinnerlist>(this, android.R.layout.simple_spinner_item, lev);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         lvl.setAdapter(adapter);
 
-        cat = findViewById(R.id.category);
+        cat = (Spinner) findViewById(R.id.category);
         cate = new ArrayList<>();
-        getCategory();
+
         adapter2 = new ArrayAdapter<Spinnerlist>(this, android.R.layout.simple_spinner_item, cate);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
         cat.setAdapter(adapter2);
 
+        getLevel();
+        getCategory();
         cat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -128,9 +126,10 @@ public class addRecipe extends AppCompatActivity {
                 try {
                     Log.e("WOI", response);
                     JSONObject object = new JSONObject(response);
-                    for(int i = 0; i < object.length(); i++) {
+                    JSONArray arr = object.getJSONArray("level");
+                    for(int i = 0; i < arr.length(); i++) {
                         try {
-                            JSONObject jsonObject = object.getJSONObject("level");
+                            JSONObject jsonObject = arr.getJSONObject(i);
                             int id = jsonObject.getInt("id_level");
                             String nama = jsonObject.getString("nama_level");
 
@@ -166,9 +165,10 @@ public class addRecipe extends AppCompatActivity {
                 try {
                     Log.e("WOI", response);
                     JSONObject object = new JSONObject(response);
-                    for(int i = 0; i < object.length(); i++) {
+                    JSONArray arr = object.getJSONArray("category");
+                    for(int i = 0; i < arr.length(); i++) {
                         try {
-                            JSONObject jsonObject = object.getJSONObject("category");
+                            JSONObject jsonObject = arr.getJSONObject(i);
                             int id = jsonObject.getInt("id_category");
                             String nama = jsonObject.getString("nama_category");
 
@@ -191,7 +191,13 @@ public class addRecipe extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        }){
+            @Override
+            protected Map<String,String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                return params;
+            }
+        };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }

@@ -1,9 +1,7 @@
 package com.example.alviraputri.smartrecipe;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -12,24 +10,23 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +45,7 @@ public class addRecipe2 extends AppCompatActivity {
         setContentView(R.layout.activity_add_recipe2);
 
         back = (Button) findViewById(R.id.back);
-        submit = (Button) findViewById(R.id.next);
+        submit = (Button) findViewById(R.id.next2);
         pic = (Button) findViewById(R.id.foto);
         nimage = (ImageView)  findViewById(R.id.imageView12);
         step = (EditText) findViewById(R.id.textView4);
@@ -62,14 +59,14 @@ public class addRecipe2 extends AppCompatActivity {
             }
         });
 
-        /*pic.setOnClickListener(new View.OnClickListener() {
+        pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, 1);
             }
-        });*/
+        });
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,8 +99,6 @@ public class addRecipe2 extends AppCompatActivity {
                 bitmapsimg = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
                 nimage.setImageBitmap(bitmapsimg);
                 nimage.setVisibility(View.VISIBLE);
-
-
             } catch (IOException e){
 
             }
@@ -118,18 +113,8 @@ public class addRecipe2 extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-
-                            JSONObject jsonObject  = new JSONObject(response);
-
-                            String Response = jsonObject.getString("response");
-                            Toast.makeText(getApplicationContext(), Response,Toast.LENGTH_LONG).show();
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                        Intent i = new Intent(getApplicationContext(), BottomNav.class);
+                        startActivity(i);
 
                     }
                 }, new Response.ErrorListener() {
@@ -163,7 +148,9 @@ public class addRecipe2 extends AppCompatActivity {
             }
         };
 
-        MySingleton.getmInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+        //MySingleton.getmInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
 
     }
 

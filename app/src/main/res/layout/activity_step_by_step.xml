@@ -98,6 +98,7 @@
                     android:onClick="slideDown" />
 
                 <TextView
+                    android:id="@+id/ins"
                     android:layout_width="328dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
