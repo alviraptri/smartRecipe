@@ -32,6 +32,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class fragmentChef extends Fragment {
     TextView welcome;
     String url;
+    Button logout;
 
     @Nullable
     @Override
@@ -44,6 +45,7 @@ public class fragmentChef extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_chef, container, false);
         welcome = (TextView) rootView.findViewById(R.id.textView11);
+        logout = (Button) rootView.findViewById(R.id.logout);
 
         welcome.setText("Welcome, "+name);
         Button m = (Button) rootView.findViewById(R.id.tambah);
@@ -52,6 +54,18 @@ public class fragmentChef extends Fragment {
             public void onClick(View v) {
                 Intent m = new Intent(getActivity(), addRecipe.class);
                 startActivity(m);
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences pref = getActivity().getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.clear();
+                editor.commit();
+                Intent i = new Intent(getContext(), Login.class);
+                startActivity(i);
             }
         });
 

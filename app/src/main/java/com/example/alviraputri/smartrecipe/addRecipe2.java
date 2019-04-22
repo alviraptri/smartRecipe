@@ -2,6 +2,7 @@ package com.example.alviraputri.smartrecipe;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -38,6 +40,7 @@ public class addRecipe2 extends AppCompatActivity {
     private Bitmap bitmapsimg;
     private ImageView nimage;
     private String url = "http://sistechuph.com/smartrecipe/upload.php";
+    EditText step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class addRecipe2 extends AppCompatActivity {
         submit = (Button) findViewById(R.id.next);
         pic = (Button) findViewById(R.id.foto);
         nimage = (ImageView)  findViewById(R.id.imageView12);
+        step = (EditText) findViewById(R.id.textView4);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,8 +142,22 @@ public class addRecipe2 extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+
+                String nama_cat = pref.getString("nama_category", "");
+                String nama_lvl = pref.getString("nama_level", "");
+                String ing = pref.getString("ingre", "");
+                String title = pref.getString("title", "");
+                int id_user = pref.getInt("id", 0);
+
                 Map<String,String> params = new HashMap<>();
-                Log.e("GAMBAR", imageToString(bitmapsimg));
+                params.put("title", title);
+                params.put("id_user", String.valueOf(id_user));
+                params.put("cate", nama_cat);
+                params.put("level", nama_lvl);
+                params.put("ing", ing);
+                params.put("step", step.getText().toString());
                 params.put("image",imageToString(bitmapsimg));
                 return params;
             }
