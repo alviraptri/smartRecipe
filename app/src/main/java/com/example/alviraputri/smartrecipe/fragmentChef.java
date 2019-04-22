@@ -37,16 +37,15 @@ public class fragmentChef extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SharedPreferences pref = this.getContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        String name = pref.getString("name", "");
+        String name = pref.getString("nama", "");
         url = "http://sistechuph.com/smartrecipe/";
-
-        welcome = (TextView) getView().findViewById(R.id.textView11);
-
-        welcome.setText("Welcome "+name);
 
         //getData();
 
         View rootView = inflater.inflate(R.layout.fragment_chef, container, false);
+        welcome = (TextView) rootView.findViewById(R.id.textView11);
+
+        welcome.setText("Welcome, "+name);
         Button m = (Button) rootView.findViewById(R.id.tambah);
         m.setOnClickListener(new View.OnClickListener() {
             @Override
